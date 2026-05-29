@@ -1,0 +1,29 @@
+name: Build Portable Windows App
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: # Permette di far partire l'azione manualmente
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        toolchain: stable
+        targets: x86_64-pc-windows-msvc
+
+    - name: Build Release
+      run: cargo build --release
+
+    - name: Upload Windows Executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: OrologiGlobali_Windows11
+        path: target/release/dual_clock_app.exe
